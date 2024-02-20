@@ -31,6 +31,7 @@ function draw() {
   noStroke();
   fill(sandColour, 255, 255);
   drawSandPit();
+  fall();
 }
 
 function mouseDragged() {
@@ -57,4 +58,15 @@ function drawSand(sand, column, row) {
 
 function setSandColour(column, row) {
   sandPit[column][row] = sandColour;
+}
+
+function fall() {
+  let fallenSandPit = createSandPit(columns, rows);
+  sandPit.forEach((sandColumn, column) => {
+    sandColumn.forEach((sand, row) => {
+      fallenSandPit[column][row + 1] = sand
+    });
+  });
+
+  sandPit = fallenSandPit
 }
