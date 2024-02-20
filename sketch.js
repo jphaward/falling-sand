@@ -1,14 +1,18 @@
 const sandSize = 5;
 const sandColour = 42;
+const defaultColour = 0;
+let sandPit;
+let columns;
+let rows;
 
 function createSandPit(columns, rows) {
   let sandPit = [];
-  for (let i = 0; i < columns; i++) {
-      let column = [];
-      for (let j = 0; j < rows; j++) {
-          column.push(0);
+  for (let column = 0; column < columns; column++) {
+      let sandColumn = [];
+      for (let row = 0; row < rows; row++) {
+        sandColumn.push(defaultColour);
       }
-      sandPit.push(column);
+      sandPit.push(sandColumn);
   }
   return sandPit;
 }
