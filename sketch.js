@@ -39,7 +39,7 @@ function draw() {
 function mouseDragged() {
   let mouseColumn = floor(mouseX / sandSize);
   let mouseRow = floor(mouseY / sandSize);
-  setSandColour(mouseColumn, mouseRow);
+  createSand(mouseColumn, mouseRow);
 }
 
 function drawSandPit() {
@@ -59,8 +59,16 @@ function drawSand(sand, column, row) {
   }
 }
 
-function setSandColour(column, row) {
-  sandPit[column][row] = sandColour;
+function createSand(column, row, radius = 1, chanceOfSand = 0.25) {
+  for (let columnDelta = -radius; columnDelta <= radius; columnDelta++ ) {
+    for (let rowDelta = -radius; rowDelta <= radius; rowDelta++ ) {
+      let currentColumn = column + columnDelta;
+      let currentRow = row + rowDelta;
+      if (Math.random() <= chanceOfSand && withinSandPit(currentColumn, currentRow)) {
+        sandPit[currentColumn][currentRow] = sandColour;
+      }
+    }
+  }
 }
 
 function fall() {
@@ -75,19 +83,23 @@ function fall() {
     });
   });
 
-  sandPit = fallenSandPit.slice();
+  sandPit = fallenSandPit;
 }
 
 function sandAtXBoundary(row) {
   return row == rows - 1;
 }
 
+function withinSandPit(column, row) {
+  return column >= 0 && column <= columns && row >= 0 && row <= rows;
+}
+
 function sandBelow(column, row) {
-  return sandPit[column][row + 1] != defaultState
+  return sandPit[column][row + 1] != defaultState;
 }
 
 function sandPresent(column, row) {
-  return sandPit[column][row] != defaultState
+  return sandPit[column][row] != defaultState;
 }
 
 function nextSandColour() {
