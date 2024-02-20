@@ -10,7 +10,8 @@ function createSandPit(columns, rows) {
   for (let column = 0; column < columns; column++) {
       let sandColumn = [];
       for (let row = 0; row < rows; row++) {
-        sandColumn.push(defaultColour);
+        sand = defaultColour
+        sandColumn.push(sand);
       }
       sandPit.push(sandColumn);
   }
@@ -28,21 +29,32 @@ function setup() {
 function draw() {
   background(0);
   noStroke();
-
-  for (let column = 0; column < columns; column++) {
-    for (let row = 0; row < rows; row++) {
-      if (sandPit[column][row] > 0) {
-        fill(sandPit[column][row], 255, 255);
-        let sandX = column * sandSize;
-        let sandY = row * sandSize;
-        square(sandX, sandY, sandSize);
-      }
-    }
-  }
+  fill(sandColour, 255, 255);
+  drawSandPit();
 }
 
 function mouseDragged() {
   let mouseColumn = floor(mouseX / sandSize);
   let mouseRow = floor(mouseY / sandSize);
-  sandPit[mouseColumn][mouseRow] = sandColour;
+  setSandColour(mouseColumn, mouseRow)
+}
+
+function drawSandPit() {
+  sandPit.forEach((sandColumn, column) => {
+    sandColumn.forEach((sand, row) => {
+      drawSand(sand, column, row);
+    });
+  });
+}
+
+function drawSand(sand, column, row) {
+  if (sand != defaultColour) {
+    let sandX = column * sandSize;
+    let sandY = row * sandSize;
+    square(sandX, sandY, sandSize);
+  }
+}
+
+function setSandColour(column, row) {
+  sandPit[column][row] = sandColour;
 }
