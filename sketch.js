@@ -1,6 +1,6 @@
 const sandSize = 5;
 const sandColour = 42;
-const defaultColour = 0;
+const defaultState = -1;
 let sandPit;
 let columns;
 let rows;
@@ -18,7 +18,7 @@ function createSandPit(columns, rows) {
   for (let column = 0; column < columns; column++) {
       let sandColumn = [];
       for (let row = 0; row < rows; row++) {
-        sand = defaultColour
+        sand = defaultState
         sandColumn.push(sand);
       }
       sandPit.push(sandColumn);
@@ -49,7 +49,7 @@ function drawSandPit() {
 }
 
 function drawSand(sand, column, row) {
-  if (sand != defaultColour) {
+  if (sand != defaultState) {
     let sandX = column * sandSize;
     let sandY = row * sandSize;
     square(sandX, sandY, sandSize);
@@ -80,9 +80,9 @@ function sandAtXBoundary(row) {
 }
 
 function sandBelow(column, row) {
-  return sandPit[column][row + 1] != defaultColour
+  return sandPit[column][row + 1] != defaultState
 }
 
 function sandPresent(column, row) {
-  return sandPit[column][row] != defaultColour
+  return sandPit[column][row] != defaultState
 }
