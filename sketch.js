@@ -75,10 +75,18 @@ function fall() {
   let fallenSandPit = createSandPit(columns, rows);
   sandPit.forEach((sandColumn, column) => {
     sandColumn.forEach((sand, row) => {
-      if ((sandAtXBoundary(row) || (sandBelow(column, row))) && sandPresent(column, row)) {
-        fallenSandPit[column][row] = sand;
-      } else {
+      if (emptySandSpace(column, row)) {
+        return;
+      }
+
+      if (emptySandSpaceBelowLeft(column, row) && !emptySandSpaceBelow(column, row)) {
+        fallenSandPit[column - 1][row + 1] = sand;
+      } else if (emptySandSpaceBelowRight(column, row) && !emptySandSpaceBelow(column, row)) {
+        fallenSandPit[column + 1][row + 1] = sand;  
+      } else if (emptySandSpaceBelow(column, row)) {
         fallenSandPit[column][row + 1] = sand;
+      } else {
+        fallenSandPit[column][row] = sand;
       }
     });
   });
@@ -86,20 +94,48 @@ function fall() {
   sandPit = fallenSandPit;
 }
 
-function sandAtXBoundary(row) {
+function sandAtBottomXBoundary(row) {
   return row == rows - 1;
 }
 
+function sandAtLeftYBoundary(column) {
+  return column == 0;
+}
+
+function sandAtRightYBoundary(column) {
+  return column == columns - 1;
+}
+
 function withinSandPit(column, row) {
-  return column >= 0 && column <= columns && row >= 0 && row <= rows;
+  return column >= 0 && column < columns && row >= 0 && row < rows;
 }
 
-function sandBelow(column, row) {
-  return sandPit[column][row + 1] != defaultState;
+function emptySandSpaceBelow(column, row) {
+  if (sandAtBottomXBoundary(row)) {
+    return false;
+  } else {
+    return sandPit[column][row + 1] == defaultState;
+  }
 }
 
-function sandPresent(column, row) {
-  return sandPit[column][row] != defaultState;
+function emptySandSpaceBelowLeft(column, row) {
+  if (sandAtLeftYBoundary(column)) {
+    return false;
+  } else {
+    return sandPit[column - 1][row + 1] == defaultState;
+  }
+}
+
+function emptySandSpaceBelowRight(column, row) {
+  if (sandAtRightYBoundary(column)) {
+    return false
+  } else {
+    return sandPit[column + 1][row + 1] == defaultState;
+  }
+}
+
+function emptySandSpace(column, row) {
+  return sandPit[column][row] == defaultState;
 }
 
 function nextSandColour() {
